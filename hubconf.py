@@ -13,7 +13,7 @@ def _create_model(model_name: str, link: str):
 
 available_models = yaml.safe_load(open("links.yaml", "r"))
 for model_name, link in available_models.items():
-    globals()[model_name] = _create_model(model_name, link)
+    globals()[model_name] = _create_model
 
 # MODEL_NAME = "harsccencoder"
 
