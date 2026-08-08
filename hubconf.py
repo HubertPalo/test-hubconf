@@ -3,8 +3,11 @@ from minerva.models.nets.time_series.cnns import CNN_PF_Backbone
 from minerva.models.nets.time_series.resnet import _ResNet1D, ResNetSEBlock
 from minerva.models.nets.time_series.imu_transformer import _IMUTransformerEncoder
 from minerva.models.nets.tnc import RnnEncoder, TSEncoder
+from pathlib import Path
 import yaml
 
+HUBCONF_DIR = Path(__file__).resolve().parent
+LINKS_FILE = HUBCONF_DIR / "links.yaml"
 
 def _get_harscnnencoder_backbone(dim=2304):
     model = HARSCnnEncoder(dim=dim, input_channel=6, inner_conv_output_dim=128*10)
@@ -76,6 +79,6 @@ def _get_function_that_creates_custom_model(model_name, link):
         return _get_model(model_name, link)
     return custom_function
 
-available_models = yaml.safe_load(open("./links.yaml", "r"))
+available_models = yaml.safe_load(open(LINKS_FILE, "r"))
 for model_name, link in available_models.items():
     globals()[model_name] = _get_function_that_creates_custom_model(model_name, link)
