@@ -18,3 +18,8 @@ for model_name, link in available_models.items():
 # MODEL_NAME = "harsccencoder"
 
 # globals()[MODEL_NAME] = _create_model
+
+def __getattr__(name):
+    print(f"Getting model: {name}")
+
+    return "adasdsadas"
