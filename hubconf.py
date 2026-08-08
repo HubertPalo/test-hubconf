@@ -5,9 +5,8 @@ from minerva.models.nets.time_series.imu_transformer import _IMUTransformerEncod
 from minerva.models.nets.tnc import RnnEncoder, TSEncoder
 from pathlib import Path
 import yaml
+import torch
 
-HUBCONF_DIR = Path(__file__).resolve().parent
-LINKS_FILE = HUBCONF_DIR / "links.yaml"
 
 def _get_harscnnencoder_backbone(dim=2304):
     model = HARSCnnEncoder(dim=dim, input_channel=6, inner_conv_output_dim=128*10)
@@ -69,15 +68,20 @@ def _get_backbone(model_name: str):
     }
     return models.get(model_name)()
 
-def _get_model(model_name: str, link: str):
-
-    print(f"Creating model: {model_name}, Link: {link}")
-    return "asd"
+def _get_model(model_name: str, url: str):
+    weights = torch.hub.load_state_dict_from_url(url, map_location="cpu", weights_only=True)
+    print(f"Creating model: {model_name}, Link: {url}, weights: {weights}")
+    return weights
 
 def _get_function_that_creates_custom_model(model_name, link):
     def custom_function():
         return _get_model(model_name, link)
     return custom_function
+
+
+
+HUBCONF_DIR = Path(__file__).resolve().parent
+LINKS_FILE = HUBCONF_DIR / "links.yaml"
 
 available_models = yaml.safe_load(open(LINKS_FILE, "r"))
 for model_name, link in available_models.items():
