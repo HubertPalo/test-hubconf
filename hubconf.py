@@ -68,8 +68,8 @@ def _get_backbone(model_name: str):
     }
     return models.get(model_name)()
 
-def _get_model(model_name: str, url: str):
-    weights = torch.hub.load_state_dict_from_url(url, map_location="cpu", weights_only=True)
+def _get_model(model_name: str, url: str, device: str = "cuda"):
+    weights = torch.hub.load_state_dict_from_url(url, map_location=device, weights_only=True)["state_dict"]
     print(f"Creating model: {model_name}, Link: {url}, weights: {weights}")
     return weights
 
