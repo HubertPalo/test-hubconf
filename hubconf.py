@@ -1,25 +1,15 @@
 from minerva.models.nets.lfr_har_architectures import HARSCnnEncoder
 import yaml
 
-def _create_model(model_name: str, link: str):
+def _get_model(model_name: str, link: str):
     print(f"Creating model: {model_name}, Link: {link}")
     return "asd"
-# def _create_model(pretrained=False):
-#     return HARSCnnEncoder(
-#         dim=125,
-#         input_channel=6,
-#         inner_conv_output_dim=128 * 10
-#     )
+
+def _get_function_that_creates_custom_model(model_name, link):
+    def custom_function():
+        return _get_model(model_name, link)
+    return custom_function
 
 available_models = yaml.safe_load(open("links.yaml", "r"))
 for model_name, link in available_models.items():
-    globals()[model_name] = _create_model
-
-# MODEL_NAME = "harsccencoder"
-
-# globals()[MODEL_NAME] = _create_model
-
-def __getattr__(name):
-    print(f"Getting model: {name}")
-
-    return "adasdsadas"
+    globals()[model_name] = _get_function_that_creates_custom_model(model_name, link)
