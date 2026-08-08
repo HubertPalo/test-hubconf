@@ -74,8 +74,8 @@ def _get_model(model_name: str, url: str, device: str = "cuda"):
     return weights
 
 def _get_function_that_creates_custom_model(model_name, url):
-    def custom_function():
-        return _get_model(model_name, url)
+    def custom_function(device):
+        return _get_model(model_name, url, device=device)
     return custom_function
 
 
