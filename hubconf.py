@@ -69,15 +69,20 @@ def _get_backbone(model_name: str):
     return models.get(model_name)()
 
 def _get_model(model_name: str, url: str, device: str = "cuda"):
-    weights = torch.hub.load_state_dict_from_url(url, map_location=device, weights_only=True)["state_dict"]
-    print(f"Creating model: {model_name}, Link: {url}, weights: {weights}")
-    return weights
+    backbone = _get_backbone(model_name=model_name)
+    state_dict = torch.hub.load_state_dict_from_url(url, map_location=device, weights_only=True)["state_dict"]
+    state_dict = {
+        key.replace("backbone.", ""): value
+        for key, value in state_dict.items() if key.startswith("backbone")
+    }
+    backbone.load_state_dict(state_dict, strict=True)
+    print(f"Creating model: {model_name}, Link: {url}, weights: {state_dict}")
+    return backbone
 
 def _get_function_that_creates_custom_model(model_name, url):
     def custom_function(device):
         return _get_model(model_name, url, device=device)
     return custom_function
-
 
 
 HUBCONF_DIR = Path(__file__).resolve().parent
