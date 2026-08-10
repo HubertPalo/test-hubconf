@@ -58,7 +58,7 @@ def _get_ts2vec_backbone():
 
 def _get_backbone(model_name: str):
     models = {
-        "harscnnencoder": _get_harscnnencoder_backbone,
+        "tstcc": _get_harscnnencoder_backbone,
         "cnnpff": _get_cnnpff_backbone,
         "resnetse5": _get_resnetse5_backbone,
         "imutransformer": _get_transformer_backbone,
