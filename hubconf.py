@@ -56,7 +56,7 @@ def _get_ts2vec_backbone():
     )
     return model
 
-def _get_backbone(model_name: str):
+def _get_backbone(backbone_name: str):
     models = {
         "tstcc": _get_harscnnencoder_backbone,
         "cnnpff": _get_cnnpff_backbone,
@@ -66,14 +66,15 @@ def _get_backbone(model_name: str):
         "ts2vec": _get_ts2vec_backbone,
 
     }
-    if model_name not in models.keys():
-        raise ValueError(f"Invalid '{model_name}' backbone value.")
-    return models.get(model_name)()
+    if backbone_name not in models.keys():
+        raise ValueError(f"Invalid '{backbone_name}' backbone value.")
+    return models.get(backbone_name)()
 
-def _get_model(model_name: str, url: str, device: str = "cuda"):
-    backbone_name = model_name.split("_")[1]
-    technique_name = model_name.split("_")[0]
-    backbone = _get_backbone(model_name=backbone_name)
+def _get_model(file_name: str, url: str, device: str = "cuda"):
+    print(f"Loading file: {file_name} from: {url}")
+    backbone_name = file_name.split("_")[1]
+    technique_name = file_name.split("_")[0]
+    backbone = _get_backbone(backbone_name=backbone_name)
     state_dict = torch.hub.load_state_dict_from_url(url, map_location=device, weights_only=True)["state_dict"]
     # if technique_name == "tfc":
     state_dict = {
@@ -81,7 +82,6 @@ def _get_model(model_name: str, url: str, device: str = "cuda"):
         for key, value in state_dict.items() if key.startswith("backbone")
     }
     backbone.load_state_dict(state_dict, strict=True)
-    print(f"Creating model: {model_name}, Link: {url}, weights: {state_dict}")
     return backbone
 
 def _get_function_that_creates_custom_model(model_name, url):
