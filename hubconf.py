@@ -66,6 +66,8 @@ def _get_backbone(model_name: str):
         "ts2vec": _get_ts2vec_backbone,
 
     }
+    if model_name not in models.keys():
+        raise ValueError(f"Invalid '{model_name}' backbone value.")
     return models.get(model_name)()
 
 def _get_model(model_name: str, url: str, device: str = "cuda"):
