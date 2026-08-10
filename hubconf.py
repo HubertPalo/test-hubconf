@@ -71,9 +71,11 @@ def _get_backbone(model_name: str):
     return models.get(model_name)()
 
 def _get_model(model_name: str, url: str, device: str = "cuda"):
-    backbone_str = model_name.split("_")[1]
-    backbone = _get_backbone(model_name=backbone_str)
+    backbone_name = model_name.split("_")[1]
+    technique_name = model_name.split("_")[0]
+    backbone = _get_backbone(model_name=backbone_name)
     state_dict = torch.hub.load_state_dict_from_url(url, map_location=device, weights_only=True)["state_dict"]
+    # if technique_name == "tfc":
     state_dict = {
         key.replace("backbone.", ""): value
         for key, value in state_dict.items() if key.startswith("backbone")
