@@ -61,7 +61,7 @@ def _get_backbone(model_name: str):
         "harscnnencoder": _get_harscnnencoder_backbone,
         "cnnpff": _get_cnnpff_backbone,
         "resnetse5": _get_resnetse5_backbone,
-        "transformer": _get_transformer_backbone,
+        "imutransformer": _get_transformer_backbone,
         "rnn": _get_rnn_backbone,
         "ts2vec": _get_ts2vec_backbone,
 
