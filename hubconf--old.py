@@ -6,18 +6,9 @@ from minerva.models.nets.tnc import RnnEncoder, TSEncoder
 from pathlib import Path
 import yaml
 import torch
-from mantis.architecture import MantisV1, MantisV2
-from mantis.trainer import MantisTrainer
-
-dependencies = ["torch", "mantis-tsfm"]
 
 
-
-def tsfm_Mantis(device="cuda"):
-    network = MantisV1(device=device)
-    network = network.from_pretrained("paris-noah/Mantis-8M")
-    model = MantisTrainer(device=device, network=network)
-    return model
+def tsfm_Mantis():
 
 def _get_harscnnencoder_backbone(dim=2304):
     model = HARSCnnEncoder(dim=dim, input_channel=6, inner_conv_output_dim=128*10)
