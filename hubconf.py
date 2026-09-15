@@ -6,14 +6,38 @@ from minerva.models.nets.tnc import RnnEncoder, TSEncoder
 from pathlib import Path
 import yaml
 import torch
-from mantis.architecture import MantisV1, MantisV2
-from mantis.trainer import MantisTrainer
 
 dependencies = ["torch", "mantis-tsfm"]
 
+def _check_dependencies_for_mantis():
+    try:
+        from mantis.architecture import MantisV1, MantisV2
+        from mantis.trainer import MantisTrainer
+        return MantisV1, MantisV2, MantisTrainer
+    except ModuleNotFoundError as e:
+        if e.name == "mantis":
+            return ImportError("This functionality requires the 'mantis-tsfm' package. Please install it with:\n\n pip install mantis-tsfm\n")
+    return None
+
+# def _check_dependencies():
+
+#     try:
+#         from mantis.architecture import MantisV1, MantisV2
+#         from mantis.trainer import MantisTrainer
+#         return MantisV1, MantisV2, MantisTrainer
+#     except ModuleNotFoundError as e:
+#         if e.name == "mantis":
+#             raise ImportError( "The 'mantis-tsfm' package is required to use this repository. " "Please install it with:\n\n" " pip install mantis-tsfm\n" )
+#             from e
+#             raise
 
 
 def tsfm_Mantis(device="cuda"):
+    dependency_check = _check_dependencies_for_mantis()
+    if isinstance(dependency_check, ImportError):
+        raise dependency_check
+    from mantis.architecture import MantisV1, MantisV2
+    from mantis.trainer import MantisTrainer
     network = MantisV1(device=device)
     network = network.from_pretrained("paris-noah/Mantis-8M")
     model = MantisTrainer(device=device, network=network)
