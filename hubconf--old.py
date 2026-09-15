@@ -8,8 +8,6 @@ import yaml
 import torch
 
 
-def tsfm_Mantis():
-
 def _get_harscnnencoder_backbone(dim=2304):
     model = HARSCnnEncoder(dim=dim, input_channel=6, inner_conv_output_dim=128*10)
     return model

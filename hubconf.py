@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 import torch
 
-dependencies = ["torch", "mantis-tsfm"]
+dependencies = ["torch"]
 
 def _check_dependencies_for_mantis():
     try:
