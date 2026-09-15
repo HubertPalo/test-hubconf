@@ -16,8 +16,8 @@ def _check_dependencies_for_mantis():
         return MantisV1, MantisV2, MantisTrainer
     except ModuleNotFoundError as e:
         if e.name == "mantis":
-            return ImportError("This functionality requires the 'mantis-tsfm' package. Please install it with:\n\n pip install mantis-tsfm\n")
-    return None
+            raise ImportError("This functionality requires the 'mantis-tsfm' package. Please install it with:\n\n pip install mantis-tsfm\n")
+    return MantisV1, MantisV2, MantisTrainer
 
 # def _check_dependencies():
 
@@ -33,11 +33,7 @@ def _check_dependencies_for_mantis():
 
 
 def tsfm_Mantis(device="cuda"):
-    dependency_check = _check_dependencies_for_mantis()
-    if isinstance(dependency_check, ImportError):
-        raise dependency_check
-    from mantis.architecture import MantisV1, MantisV2
-    from mantis.trainer import MantisTrainer
+    MantisV1, _, MantisTrainer = _check_dependencies_for_mantis()
     network = MantisV1(device=device)
     network = network.from_pretrained("paris-noah/Mantis-8M")
     model = MantisTrainer(device=device, network=network)
